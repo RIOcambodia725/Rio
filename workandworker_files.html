@@ -1,0 +1,364 @@
+<!--
+Project: workandworker.in - Starter files (editable)
+Files included below: index.html, work.html, worker.html, style.css, script.js, README-Google-Apps-Script.md, Code.gs (Apps Script)
+
+Instructions: You can edit these files directly. The frontend is static and ready for GitHub Pages. To collect registrations into a Google Sheet, follow README-Google-Apps-Script.md steps to create and deploy the Apps Script web app and paste the Web App URL into script.js -> FORM_ENDPOINT.
+
+*** IMPORTANT: This is an MVP/prototype. For production you should add authentication, server-side validation, and security checks. ***
+-->
+
+
+===== index.html =====
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Work & Worker — Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="logo">Work & Worker</h1>
+    <p class="tag">Rozgar dena</p>
+  </header>
+
+  <main class="container">
+    <section class="card register-card">
+      <h2>Register</h2>
+      <p class="muted">Register with Google (simulated) or fill details below.</p>
+
+      <form id="regForm">
+        <label>Full Name
+          <input type="text" name="name" id="name" required />
+        </label>
+
+        <label>Mobile Number
+          <input type="tel" name="phone" id="phone" pattern="[0-9+\- ]{7,15}" required />
+        </label>
+
+        <label>National ID
+          <input type="text" name="nid" id="nid" required />
+        </label>
+
+        <label>Email (Google sign-in placeholder)
+          <input type="email" name="email" id="email" required />
+        </label>
+
+        <label>Register As
+          <select id="role" name="role">
+            <option value="work">Work (I need work)</option>
+            <option value="worker">Worker (I offer work)</option>
+          </select>
+        </label>
+
+        <label>Category
+          <select id="category" name="category">
+            <option value="plumber">Plumber</option>
+            <option value="electrician">Electrician</option>
+            <option value="labour">Labour</option>
+            <option value="tiles">Tiles & Marble</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <label>Location (click to set)
+          <input type="text" id="location" name="location" placeholder="Click 'Set my location' or type address" />
+        </label>
+
+        <div class="row">
+          <button type="button" id="geoBtn">Set my location</button>
+          <button type="submit">Register</button>
+        </div>
+
+        <p id="status" class="muted"></p>
+      </form>
+
+    </section>
+
+    <section class="card quick-links">
+      <h3>Quick Links</h3>
+      <div class="links">
+        <a class="btn" href="work.html">Find Work</a>
+        <a class="btn" href="worker.html">Find Workers</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© Work & Worker</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+===== work.html =====
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Work — Find Jobs</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="logo">Work & Worker</h1>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Find Work</h2>
+      <p class="muted">Select a category to see people who need a worker (you can view contact numbers).</p>
+
+      <label>Category
+        <select id="workCat">
+          <option value="plumber">Plumber</option>
+          <option value="electrician">Electrician</option>
+          <option value="labour">Labour</option>
+          <option value="tiles">Tiles & Marble</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="index.html">← Back</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+===== worker.html =====
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Workers — Find Employees</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="logo">Work & Worker</h1>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Find Workers</h2>
+      <p class="muted">Select a category to see registered workers near you.</p>
+
+      <label>Category
+        <select id="workerCat">
+          <option value="plumber">Plumber</option>
+          <option value="electrician">Electrician</option>
+          <option value="labour">Labour</option>
+          <option value="tiles">Tiles & Marble</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+
+      <div id="workers" class="results"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="index.html">← Back</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+===== style.css =====
+
+:root{
+  --bg:#ffffff;
+  --fg:#000000;
+  --muted:#666;
+  --card-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,Segoe UI,Roboto,Arial; margin:0; background:var(--bg); color:var(--fg)}
+.site-header{padding:18px 16px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:12px}
+.logo{margin:0; font-size:20px}
+.tag{margin:0; color:var(--muted)}
+.container{padding:16px; max-width:840px; margin:20px auto; display:grid; grid-template-columns:1fr; gap:16px}
+.card{background:rgba(255,255,255,0.9); padding:16px; border-radius:8px; box-shadow:var(--card-shadow); border:1px solid #f0f0f0}
+.register-card input, .register-card select{width:100%; padding:10px; margin-top:6px; margin-bottom:12px; border:1px solid #ddd; border-radius:6px}
+.register-card label{display:block; font-weight:600}
+.row{display:flex; gap:8px}
+.btn{display:inline-block; padding:10px 12px; border-radius:6px; text-decoration:none; border:1px solid var(--fg)}
+.results .item{padding:10px; border-bottom:1px dashed #ddd}
+.results .item:last-child{border-bottom:none}
+.muted{color:var(--muted)}
+.site-footer{padding:12px 16px; text-align:center; border-top:1px solid #eee}
+@media (max-width:600px){.container{padding:12px; margin:12px}}
+
+/* black & white theme inversion for dark preference */
+@media (prefers-color-scheme: dark){:root{--bg:#000; --fg:#fff; --muted:#bbb}}
+
+
+===== script.js =====
+
+/*
+  Frontend script for registering users and showing results
+  IMPORTANT: Replace FORM_ENDPOINT with your deployed Google Apps Script Web App URL
+*/
+
+const FORM_ENDPOINT = "REPLACE_WITH_YOUR_APPS_SCRIPT_WEBAPP_URL"; // <-- update after deploying Apps Script
+
+async function postForm(data) {
+  if (!FORM_ENDPOINT || FORM_ENDPOINT.includes('REPLACE_WITH')) {
+    console.warn('FORM_ENDPOINT not set. Data will be stored locally (demo).');
+    // fallback: save into localStorage array for demo
+    const arr = JSON.parse(localStorage.getItem('ww_regs') || '[]');
+    arr.push(data);
+    localStorage.setItem('ww_regs', JSON.stringify(arr));
+    return { ok: true, demo: true };
+  }
+
+  const resp = await fetch(FORM_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return resp.json();
+}
+
+// Registration form handling
+const regForm = document.getElementById('regForm');
+if (regForm) {
+  regForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      nid: document.getElementById('nid').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      role: document.getElementById('role').value,
+      category: document.getElementById('category').value,
+      location: document.getElementById('location').value,
+      ts: new Date().toISOString()
+    };
+
+    document.getElementById('status').textContent = 'Registering...';
+    try {
+      const res = await postForm(data);
+      if (res && res.ok) {
+        document.getElementById('status').textContent = 'Registered successfully!';
+        regForm.reset();
+      } else {
+        document.getElementById('status').textContent = 'Error registering (see console)';
+        console.log(res);
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('status').textContent = 'Network error';
+    }
+  });
+}
+
+// Geolocation set
+const geoBtn = document.getElementById('geoBtn');
+if (geoBtn) geoBtn.addEventListener('click', () => {
+  if (!navigator.geolocation) return alert('Geolocation not supported');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude.toFixed(6);
+    const lon = pos.coords.longitude.toFixed(6);
+    document.getElementById('location').value = `${lat},${lon}`;
+  }, err => alert('Could not get location: ' + err.message));
+});
+
+// Load demo results from localStorage when visiting work/worker pages
+function loadDemoResults() {
+  const regs = JSON.parse(localStorage.getItem('ww_regs') || '[]');
+  return regs;
+}
+
+// Show results on work.html
+const workCat = document.getElementById('workCat');
+const results = document.getElementById('results');
+if (workCat) {
+  function renderWork() {
+    const cat = workCat.value;
+    const regs = loadDemoResults().filter(r => r.role === 'work' && r.category === cat);
+    results.innerHTML = regs.length ? regs.map(r => `<div class="item"><strong>${r.name}</strong><div>${r.phone}</div><div class="muted">${r.location}</div></div>`).join('') : '<p class="muted">No entries yet.</p>';
+  }
+  workCat.addEventListener('change', renderWork);
+  renderWork();
+}
+
+// Show workers on worker.html
+const workerCat = document.getElementById('workerCat');
+const workersDiv = document.getElementById('workers');
+if (workerCat) {
+  function renderWorkers() {
+    const cat = workerCat.value;
+    const regs = loadDemoResults().filter(r => r.role === 'worker' && r.category === cat);
+    workersDiv.innerHTML = regs.length ? regs.map(r => `<div class="item"><strong>${r.name}</strong><div>${r.phone}</div><div class="muted">${r.location}</div></div>`).join('') : '<p class="muted">No entries yet.</p>';
+  }
+  workerCat.addEventListener('change', renderWorkers);
+  renderWorkers();
+}
+
+
+===== README-Google-Apps-Script.md =====
+
+# Google Sheets + Apps Script setup (to store registrations into a Sheet)
+
+1. Create a new Google Sheet (e.g., "workandworker-registrations").
+2. In the Sheet, create headers in row 1: `timestamp`, `name`, `phone`, `nid`, `email`, `role`, `category`, `location`.
+3. In the Google Sheet: Extensions → Apps Script.
+4. Replace the default Code.gs with the provided Code.gs content (below).
+5. Save, then click Deploy → New deployment → Select "Web app".
+   - Execute as: **Me**
+   - Who has access: **Anyone** (or Anyone with link)
+6. Deploy and copy the Web app URL.
+7. Paste the Web app URL into `script.js` constant FORM_ENDPOINT.
+
+Now when the site sends POST JSON to the Web App URL, Apps Script will append the row to your sheet.
+
+
+===== Code.gs (Google Apps Script) =====
+
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheets()[0];
+    var content = e.postData.contents;
+    var data = JSON.parse(content);
+
+    var row = [new Date().toLocaleString(), data.name || '', data.phone || '', data.nid || '', data.email || '', data.role || '', data.category || '', data.location || ''];
+    sheet.appendRow(row);
+
+    return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ok:false, error:err.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+
+
+===== Notes & Next steps =====
+
+- The frontend demo will store data locally (localStorage) unless you deploy Apps Script and update FORM_ENDPOINT.
+- For production you should:
+  - Add server-side validation and CAPTCHA to prevent abuse
+  - Add authentication for workers/business users
+  - Implement map-based search (use Google Maps JavaScript API and store lat/lng)
+  - Use a proper backend (Firebase, Supabase, or a custom server) for scale
+
+
+-- End of files --
